@@ -1,0 +1,83 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>
+
+
+  
+  
+  <title></title>
+  
+  
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+
+
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Navigazione integrata&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQIbl7MVB3_EeSSWPbOJWKTizd6CSbJE4"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#map {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>height: 70vh;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#controls {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #f1f1f1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>input, button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 200px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let map;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let directionsService;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let directionsRenderer;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function initMap() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>map = new google.maps.Map(document.getElementById('map'), {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>zoom: 7,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>center: { lat: 41.9028, lng: 12.4964 } // Centra la mappa sull'Italia</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>directionsService = new google.maps.DirectionsService();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>directionsRenderer = new google.maps.DirectionsRenderer();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>directionsRenderer.setMap(map);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function calculateAndDisplayRoute() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const start = document.getElementById('start').value;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const end = document.getElementById('end').value;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>directionsService.route(</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{</p>
+<p class="p1"><span class="Apple-converted-space">          </span>origin: start,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>destination: end,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>travelMode: google.maps.TravelMode.DRIVING,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>(response, status) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>if (status === 'OK') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>directionsRenderer.setDirections(response);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>alert('Impossibile calcolare il percorso: ' + status);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body onload="initMap()"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="start" placeholder="Inserisci partenza"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="end" placeholder="Inserisci destinazione"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="calculateAndDisplayRoute()"&gt;Calcola percorso&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="map"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+
+
+</body></html>
