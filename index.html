@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Navigazione integrata</title>
+    <title>Navigazione con Google Maps</title>
 
-    <!-- Stili per migliorare la visualizzazione -->
     <style>
         #map {
             height: 70vh;
@@ -50,7 +49,8 @@
                 {
                     origin: start,
                     destination: end,
-                    travelMode: google.maps.TravelMode.DRIVING,
+                    travelMode: google.maps.TravelMode.DRIVING, // Opzioni: DRIVING, WALKING, BICYCLING, TRANSIT
+                    provideRouteAlternatives: true, // Per ottenere percorsi alternativi
                 },
                 (response, status) => {
                     if (status === "OK") {
@@ -73,8 +73,9 @@
     
     <div id="map"></div>
 
-    <!-- Caricamento ottimizzato dell'API di Google Maps -->
+    <!-- Caricamento ottimizzato della Google Maps API -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM1mP1fJ7ARkDqgF70FaoicEUr4Ui2QS8&callback=initMap"></script>
 
 </body>
 </html>
+
