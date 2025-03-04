@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Navigazione con Google Maps</title>
+    <title>Navigazione con Routes API</title>
 
     <style>
         #map {
@@ -23,20 +23,16 @@
     </style>
 
     <script>
-        let map, directionsService, directionsRenderer;
+        let map;
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 7,
                 center: { lat: 41.9028, lng: 12.4964 } // Italia
             });
-
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer();
-            directionsRenderer.setMap(map);
         }
 
-        function calculateAndDisplayRoute() {
+        async function calculateAndDisplayRoute() {
             const start = document.getElementById('start').value;
             const end = document.getElementById('end').value;
 
@@ -45,21 +41,57 @@
                 return;
             }
 
-            directionsService.route(
-                {
-                    origin: start,
-                    destination: end,
-                    travelMode: google.maps.TravelMode.DRIVING, // Opzioni: DRIVING, WALKING, BICYCLING, TRANSIT
-                    provideRouteAlternatives: true, // Per ottenere percorsi alternativi
-                },
-                (response, status) => {
-                    if (status === "OK") {
-                        directionsRenderer.setDirections(response);
-                    } else {
-                        alert("Impossibile calcolare il percorso: " + status);
-                    }
+            const apiKey = "LA_TUA_CHIAVE_API"; // Sostituisci con la tua chiave API
+            const url = `https://routes.googleapis.com/directions/v2:computeRoutes`;
+
+            const requestBody = {
+                origin: { location: { address: start } },
+                destination: { location: { address: end } },
+                travelMode: "DRIVE", // Alternative: WALK, BICYCLE, TRANSIT
+                computeAlternativeRoutes: true
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Goog-Api-Key": apiKey,
+                        "X-Goog-FieldMask": "routes.duration,routes.distanceMeters,routes.polyline"
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Errore: ${response.statusText}`);
                 }
-            );
+
+                const data = await response.json();
+                console.log("Risultato Routes API:", data);
+
+                if (data.routes && data.routes.length > 0) {
+                    drawRouteOnMap(data.routes[0].polyline.encodedPolyline);
+                    alert("Percorso calcolato con successo!");
+                } else {
+                    alert("Nessun percorso trovato!");
+                }
+
+            } catch (error) {
+                console.error("Errore nel calcolo del percorso:", error);
+                alert("Impossibile calcolare il percorso: " + error.message);
+            }
+        }
+
+        function drawRouteOnMap(encodedPolyline) {
+            const routePath = new google.maps.Polyline({
+                path: google.maps.geometry.encoding.decodePath(encodedPolyline),
+                geodesic: true,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 4
+            });
+
+            routePath.setMap(map);
         }
     </script>
 </head>
@@ -73,9 +105,8 @@
     
     <div id="map"></div>
 
-    <!-- Caricamento ottimizzato della Google Maps API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM1mP1fJ7ARkDqgF70FaoicEUr4Ui2QS8&callback=initMap"></script>
+    <!-- Caricamento della Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=LA_TUA_CHIAVE_API&libraries=geometry&callback=initMap"></script>
 
 </body>
 </html>
-
