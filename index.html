@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mappa con OpenStreetMap e GraphHopper</title>
 
-    <!-- Importa Leaflet (per visualizzare la mappa) -->
+    <!-- Importa Leaflet per visualizzare la mappa -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -32,11 +32,11 @@
     <script>
         let map;
         let routeLayer;
-        const apiKey = f3011f60-5b6d-4fcf-b8f3-cac04690c6d0; // Sostituisci con la tua chiave API gratuita di GraphHopper
+        const apiKey = "67be41ff-1402-4f9f-99a8-0645f4eb15d3"; // Tua chiave API GraphHopper
 
         function initMap() {
             // Inizializza la mappa con OpenStreetMap
-            map = L.map('map').setView([41.9028, 12.4964], 7); // Centra sulla Italia
+            map = L.map('map').setView([46.0050, 8.9520], 7); // Centra su Lugano
 
             // Aggiunge il layer di OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -97,7 +97,7 @@
 <body onload="initMap()">
 
     <div id="controls">
-        <input type="text" id="start" placeholder="Inserisci partenza (es. 41.9028,12.4964)">
+        <input type="text" id="start" placeholder="Inserisci partenza (es. 46.0050,8.9520)">
         <input type="text" id="end" placeholder="Inserisci destinazione (es. 45.4642,9.1900)">
         <button onclick="calculateAndDisplayRoute()">Calcola percorso</button>
     </div>
